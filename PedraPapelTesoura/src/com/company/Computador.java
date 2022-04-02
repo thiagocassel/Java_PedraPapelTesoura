@@ -22,6 +22,7 @@ public class Computador {
         int a;
         Random aleatorio = new Random();
         a = aleatorio.nextInt(2);
+        System.out.println("O computador jogou " + this.jogada[a]);
         return this.jogada[a];
     }
 

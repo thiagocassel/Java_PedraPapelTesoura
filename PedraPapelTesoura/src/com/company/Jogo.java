@@ -7,6 +7,7 @@ public class Jogo {
     private int rodadasParaVencer;
     Computador c = new Computador();
     Jogador j = new Jogador();
+    Scanner scanner = new Scanner(System.in);
 
     public Jogo() {
     }
@@ -20,52 +21,43 @@ public class Jogo {
     }
 
     public void iniciaJogo() {
-        int rodadas;
-        boolean positivo = false;
-        Scanner scanner = new Scanner(System.in);
-        String jogadaHumano = "";
+
         String jogadaComputador;
+        String jogadaHumano;
         boolean jogadaValida = false;
 
         System.out.println("Bem-vindo ao Pedra, Papel ou Tesoura");
         System.out.println("Digite seu nome");
         j.setNome(scanner.nextLine());
-        System.out.println("Bem-vindo, " + j.getNome() + "! Defina o número de vitórias necessárias para ganhar o jogo");
+        defineRodadas();
 
+        while (!this.temVencedor) {
+            jogadaHumano = j.joga();
+            jogadaComputador = c.joga();
+            verificaRodada(jogadaHumano,jogadaComputador);
+            verificaVencedor();
+        }
+
+        scanner.close();
+    }
+    public void defineRodadas() {
+        boolean positivo = false;
+        int rodadas;
+        System.out.println("Bem-vindo, " + j.getNome() + "! Defina o número de vitórias necessárias para ganhar o jogo");
         while (!positivo) {
-            try { rodadas = Integer.parseInt(scanner.nextLine());
+            try {
+                rodadas = Integer.parseInt(scanner.nextLine());
                 if (rodadas > 0) {
                     setRodadasParaVencer(rodadas);
                     positivo = true;
                 } else {
                     System.out.println("Digite um número maior do que zero");
                 }
-
-            } catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Digite um número");
             }
         }
         System.out.println("Ganha o jogo quem vencer " + getRodadasParaVencer() + " rodadas primeiro!");
-        while (!this.temVencedor) {
-
-            while (!jogadaValida) {
-                System.out.println("Digite sua jogada (pedra/papel/tesoura)");
-                jogadaHumano = scanner.nextLine();
-                if (jogadaHumano.equals("pedra") || jogadaHumano.equals("papel") || jogadaHumano.equals("tesoura")) {
-                    jogadaValida = true;
-                    System.out.println("Você jogou " + jogadaHumano);
-                } else {
-                    System.out.println("Digite uma opção válida");
-                }
-            }
-            jogadaValida = false;
-            jogadaComputador = c.joga();
-            System.out.println("O computador jogou " + jogadaComputador);
-            verificaRodada(jogadaHumano,jogadaComputador);
-            verificaVencedor();
-        }
-
-        scanner.close();
     }
 
     public void verificaRodada(String jogadaHumano, String jogadaComputador) {
@@ -80,7 +72,6 @@ public class Jogo {
         } else {
             System.out.println("Você venceu a rodada!");
             j.somaVitoria();
-
         }
         System.out.println("--------------------");
         System.out.println("Placar:");
@@ -99,9 +90,7 @@ public class Jogo {
         } else {
             System.out.println("Ainda não há vencedor!");
         }
-
     }
-
 }
 
 
